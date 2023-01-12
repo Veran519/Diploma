@@ -6,10 +6,10 @@
                     <div class="d-flex justify-content-between">
                         <div class="mb-5 d-flex flex-column s-form">
                             <p class="callback_text">Оставьте заявку и получите консультацию нашего специалиста в течение 10 минут</p>
-                            <form type="submit" class="d-flex flex-column c-form">
-                                <input type="text" class="mb-3 i-form" placeholder="Имя">
-                                <input type="phone" class="mb-3 i-form" placeholder="Телефон">
-                                <div class="b-call pt-1">Оставить заявку</div>
+                            <form type="submit" method="post" class="d-flex flex-column c-form">
+                                <input type="text" v-model="name" class="mb-3 i-form" placeholder="Имя">
+                                <input type="phone" v-model="phone" class="mb-3 i-form" placeholder="Телефон">
+                                <div @click="sendForm" class="b-call pt-1">Оставить заявку</div>
                             </form>
                         </div>
                         <div class="img-f mb-5">
@@ -19,6 +19,37 @@
                 </div>                                          
         </section>
 </template>
+
+<script>
+    import { askCallBack } from '../../services/ApiMethods';
+
+    export default {
+    name: 'CallBack',
+    components: {
+        
+    },
+    data(){
+        return {
+            name: '',
+            phone: '',
+        }
+      },
+      methods:{
+        async sendForm() {   
+        try { 
+          const callBackreq = await askCallBack({
+            name:this.name,
+            phone:this.phone
+          });
+          alert('Ваша заявка отправлена!');
+        } catch (error) {
+              alert("Ошибка отправки данных для обратного звонка!", "error");
+            }  
+        },
+      },
+      
+  }
+</script>
 
 <style>
     .h-text {
@@ -36,7 +67,7 @@
         width: 50%;
     }
     .c-form {
-        width: 50%;
+        width: 40%;
     }
     .i-form {
         background-color: #9D6796;
