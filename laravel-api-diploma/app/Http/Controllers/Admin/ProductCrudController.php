@@ -66,7 +66,15 @@ class ProductCrudController extends CrudController
             'label' => 'Можем повторить?',
             'type'  => 'boolean',
         ]);
-        CRUD::column('category_id')->label('Категория');
+        /*CRUD::column('category_id')->label('Категория');*/
+        $this->crud->addColumn([
+            'name'  => 'category_id',
+            'label' => 'Категория',
+            'type'  => 'select',
+            'entity' => 'category',
+            'model' => 'App\Models\Category',
+            'attribute' => 'name'
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

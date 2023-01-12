@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImageInCategory extends Migration
+class ChangeColumnAdressInOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddImageInCategory extends Migration
      */
     public function up()
     {
-        Schema::table('category', function (Blueprint $table) {
-            $table->string('prevImage');
+        Schema::table('order', function (Blueprint $table) {
+            $table->string('adress')->nullable()->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddImageInCategory extends Migration
      */
     public function down()
     {
-        Schema::table('category', function (Blueprint $table) {
-            $table->dropColumn('prevImage');
+        Schema::table('order', function (Blueprint $table) {
+            $table->dropColumn('adress');
         });
     }
 }
