@@ -9,12 +9,15 @@ body {
     color: #502D5C;
 }
 
-main h1 {
-    font-family: 'Pacifico';
-    font-size: 72px;
-    line-height: 145%;
-    letter-spacing: 2px;
-    color: #502D5C;
+.hidden {
+    display: none;
+}
+
+@media (max-width: 1655px) {
+    .container-fluid {
+        margin: 0 auto;
+        text-align: center;
+    }
 }
 
 main h2 {
@@ -24,38 +27,6 @@ main h2 {
     color: #502D5C;
 }
 
-.h-text {
-    text-align: center;
-    font-family: 'Pacifico';
-    font-size: 32px;
-    line-height: 140%;
-    color: #502D5C;
-}
-
-.text-p {
-    font-family: 'Noto Serif';
-    font-size: 20px;
-    line-height: 140%;
-    color: #502D5C;
-    word-wrap: break-word;
-}
-
-.hidden {
-    display: none;
-}
-
-.calltoact {
-    font-family: 'Noto Serif';
-    font-size: 20px;
-    background-color: #502D5C;
-    width: fit-content; 
-    border-radius: 5px;
-}
-
-.btn {
-   color: #BBBABC !important;
-}
-
 main h3 {
     font-family: 'Pacifico';
     font-size: 24px;
@@ -63,7 +34,4 @@ main h3 {
     color: #502D5C;
 }
 
-.buyC {
-    width: 60%;
-    text-align: center;
-}
+
