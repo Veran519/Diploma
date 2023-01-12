@@ -16,7 +16,7 @@ class Review extends Model
         'image',
     ];
 
-    public function setPictureAttribute($value) {
+    public function setimageAttribute($value) {
         $attribute_name = "image";
         $disk = "public";
         $destination_path = "image/reviews";

@@ -18,7 +18,9 @@ class Product extends Model
         'price',
         'category_id',
         'picture',
-        'description'
+        'description',
+        'isActual',
+        'isAvailable'
     ];
 
     public function setPictureAttribute($value) {
@@ -27,5 +29,9 @@ class Product extends Model
         $destination_path = "image/product";
 
         $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+    }
+
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 }

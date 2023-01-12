@@ -49,7 +49,7 @@ class CategoryCrudController extends CrudController
         CRUD::column('id')->label('Идентификатор');
         CRUD::column('name')->label('Название категории');
         $this->crud->addColumn([
-            'name'  => 'image',
+            'name'  => 'prevImage',
             'label' => 'Превью',
             'type'  => 'image',
             'prefix' => '/storage//'
@@ -74,7 +74,7 @@ class CategoryCrudController extends CrudController
 
         CRUD::field('name')->label('Название категории');
         $this->crud->addField([
-            'name'  => 'image',
+            'name'  => 'prevImage',
             'label' => 'Превью',
             'type'  => 'upload',
             'upload' => true,
@@ -103,11 +103,6 @@ class CategoryCrudController extends CrudController
     {
         CRUD::column('id')->label('Идентификатор');
         CRUD::column('name')->label('Название категории');
-        $this->crud->addColumn([
-            'name'  => 'image',
-            'label' => 'Превью',
-            'type'  => 'image',
-            'prefix' => '/storage//'
-        ]);
+        CRUD::column('prevImage')->type('image')->label('Превью');
     }
 }

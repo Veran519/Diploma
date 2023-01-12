@@ -14,13 +14,13 @@ class Category extends Model
 
     protected $fillable = [
         'name',
-        'image'
+        'prevImage'
     ];
 
-    public function setPictureAttribute($value) {
-        $attribute_name = "image";
+    public function setprevImageAttribute($value) {
+        $attribute_name = "prevImage";
         $disk = "public";
-        $destination_path = "image/previews";
+        $destination_path = "image/preview";
 
         $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
     }
