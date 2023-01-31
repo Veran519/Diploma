@@ -45,7 +45,14 @@ class OrderCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('id')->label('Номер заказа');
+        /*CRUD::column('id')->label('Номер заказа');*/
+        $this->crud->addColumn([
+            'name'  => 'order_id',
+            'label' => 'Номер заказа',
+            'entity' => 'order_product',
+            'model' => 'App\Models\Order_Product',
+            'attribute' => 'order_id'
+        ]);
         CRUD::column('name')->label('Заказчик');
         CRUD::column('adress')->label('Адрес доставки');
         CRUD::column('phone')->type('phone')->label('Номер телефона');
@@ -58,7 +65,14 @@ class OrderCrudController extends CrudController
                 1 => 'Доставка'
             ]
         ]);
-        CRUD::column('product_id')->label('Товар');
+        /*CRUD::column('product_id')->label('Товар');*/
+        $this->crud->addColumn([
+            'name'  => 'product_id',
+            'label' => 'Товары',
+            'entity' => 'product',
+            'model' => 'App\Models\Order',
+            'attribute' => 'name'
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
