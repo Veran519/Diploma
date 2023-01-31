@@ -19,4 +19,16 @@ class Order extends Model
         'product_id',
         'delivery'
     ];
+
+    public function products() {
+        return $this->belongsToMany(Product::class);
+    }
+    
+    public function product() {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function order_product() {
+        return $this->belongsTo(Order_Product::class, 'id', 'order_id');
+    }
 }

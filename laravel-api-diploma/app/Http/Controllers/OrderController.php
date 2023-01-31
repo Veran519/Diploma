@@ -31,8 +31,20 @@ class OrderController extends Controller
                 'product_id' => $id
             ]);
         }
+        
+        $order->products()->attach($product_id);
 
         return response()->json([
+            'status' => 'success',
+            'message' => 'Заказ сформирован успешно!',
+        ]);
+    }
+
+    public function getOrder() {
+        $Order= Order::find(26);
+
+        return response()->json([
+            'order' => $Order->products()->get(),
             'status' => 'success',
             'message' => 'Заказ сформирован успешно!',
         ]);

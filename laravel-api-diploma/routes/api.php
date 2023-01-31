@@ -32,3 +32,4 @@ Route::get('/category/getcategories', [CategoryController::class, 'getCategories
 Route::post('/products/getproductsinfo', [ProductController::class, 'getProductInfoByArrayIds']);
 Route::post('/feedback/post', [FeedbackController::class, 'askCallBack']);
 Route::post('/order/make', [OrderController::class, 'makeOrder']);
+Route::get('/order/getOrder', [OrderController::class, 'getOrder']);
