@@ -12,26 +12,18 @@ class OrderController extends Controller
         $checking = $req->validate([
             'name' => 'required|string',
             'phone' => 'required|string',
-            'delivery' => 'required|boolean',
-            'product_id' => 'required'
+            'delivery' => 'required|boolean'
         ]);
 
-        $name = $req->name;
-        $phone = $req->phone;
-        $delivery = $req->delivery;
-        $adress = $req->adress;
         $product_id = $req->product_id;
-        
-        foreach ($product_id as $key => $id) {
-            $order = Order::query()->create([
-                'name' => $name,
-                'adress' => $adress,
-                'phone' => $phone,
-                'delivery' => $delivery,
-                'product_id' => $id
-            ]);
-        }
-        
+
+        $order = Order::query()->create([
+            'name'  =>  $req->name,
+            'phone' =>  $req->phone,
+            'delivery' => $req->delivery,
+            'adress' => $req->adress
+        ]);
+
         $order->products()->attach($product_id);
 
         return response()->json([
@@ -41,7 +33,7 @@ class OrderController extends Controller
     }
 
     public function getOrder() {
-        $Order= Order::find(26);
+        $Order= Order::find(31);
 
         return response()->json([
             'order' => $Order->products()->get(),
