@@ -47,11 +47,12 @@ class OrderCrudController extends CrudController
     {
         /*CRUD::column('id')->label('Номер заказа');*/
         $this->crud->addColumn([
-            'name'  => 'order_id',
+            'name'  => 'id',
             'label' => 'Номер заказа',
-            'entity' => 'order_product',
-            'model' => 'App\Models\Order_Product',
-            'attribute' => 'order_id'
+            'type' => 'relationship',
+            'entity' => 'products',
+            'model' => 'App\Models\Order',
+            'attribute' => 'order_id',
         ]);
         CRUD::column('name')->label('Заказчик');
         CRUD::column('adress')->label('Адрес доставки');
@@ -65,13 +66,14 @@ class OrderCrudController extends CrudController
                 1 => 'Доставка'
             ]
         ]);
-        /*CRUD::column('product_id')->label('Товар');*/
+        
         $this->crud->addColumn([
-            'name'  => 'product_id',
+            'name'  => 'products',
             'label' => 'Товары',
-            'entity' => 'product',
+            'type' => 'select',
+            'entity' => 'products',
             'model' => 'App\Models\Order',
-            'attribute' => 'name'
+            'attribute' => 'name',
         ]);
 
         /**
