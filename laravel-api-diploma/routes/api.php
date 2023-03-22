@@ -7,6 +7,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,10 @@ Route::get('/category/getcategories', [CategoryController::class, 'getCategories
 Route::post('/products/getproductsinfo', [ProductController::class, 'getProductInfoByArrayIds']);
 Route::post('/feedback/post', [FeedbackController::class, 'askCallBack']);
 Route::post('/order/make', [OrderController::class, 'makeOrder']);
-Route::get('/order/getOrder', [OrderController::class, 'getOrder']);
+Route::get('/order/getOrder', [OrderController::class, 'getOrder'])->middleware('auth:sanctum');
+
+Route::post('/registration', [UserController::class, 'registerUser']);
+Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/updateUsersData', [UserController::class, 'updateUsersData'])->middleware('auth:sanctum');
+Route::post('/order/makeOrderByUser', [OrderController::class, 'makeOrderByUser'])->middleware('auth:sanctum');
