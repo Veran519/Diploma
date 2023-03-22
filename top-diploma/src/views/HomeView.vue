@@ -40,6 +40,4 @@
         height: 100%;
         border-radius: 40px;
     }
-
-    
 </style>

@@ -15,7 +15,8 @@
     "vue-agile": "^2.0.0",
     "vue-awesome-swiper": "^5.0.1",
     "vue-axios": "^3.5.2",
-    "vue-router": "^4.1.5"
+    "vue-router": "^4.1.5",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.3",

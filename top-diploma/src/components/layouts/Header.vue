@@ -51,6 +51,8 @@
                         </a>
                       </li>
                       <li class="nav-item me-5"><a href="tel:+7 (912)-731-78-56">+7 (912)-731-78-56</a></li>
+                      <li class="nav-item ms-5" v-if="!this.$store.state.isVisible" @click="this.$router.push('/Registration')">Регистрация</li>
+                      <li class="nav-item ms-5"  v-if="this.$store.state.isVisible" @click="this.$router.push('/Profile')">Профиль</li>
                   </ul>
                 </div>
               <a class="navbar-basket" href="#" @click="this.$router.push('/Basket')">
@@ -66,7 +68,34 @@
 </template>
 
 <script>
-    
+    import axios from 'axios';
+    import { baseUrl } from '../../services/config';
+
+    export default {
+      name: 'Header',
+      components: {
+        
+      },
+      props: ['isVisible'],
+      data(){
+        return {
+           
+        }
+      },
+      created() {
+        this.getUserInfo();
+      },
+      methods: {
+        getUserInfo() {
+          axios.defaults.headers.common['Authorization'] = 'Bearer '+ localStorage.getItem('token');
+                axios.get(baseUrl + 'api/user').then(response => {
+                  this.$store.commit('changeState', true);
+                })
+           },
+           
+              
+      }
+    }
 </script>
 
 <style>

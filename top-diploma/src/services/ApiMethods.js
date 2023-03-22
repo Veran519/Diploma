@@ -3,7 +3,7 @@ import axios from "axios";
 import baseUrlApi from "./config.js";
 
 const $api = axios.create({
-    withCredentials: false,
+    withCredentials: true,
     baseURL: baseUrlApi
 });
 

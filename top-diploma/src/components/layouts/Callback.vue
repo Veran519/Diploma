@@ -90,14 +90,19 @@
         font-family: 'Noto Serif';
         font-size: 16px;
         line-height: 140%;
+        background-color:#502D5C;
+        border-radius: 5px;
+        width: 50%;
+        height: 30px;
+        margin: 0 auto;
     }
-    form div {
+    /*form div {
         background-color:#502D5C;
         border-radius: 5px;
         width: 40%;
         height: 30px;
         margin: 0 auto;
-    }
+    }*/
     
     .callme {
         width: 100%;
