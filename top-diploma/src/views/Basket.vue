@@ -29,7 +29,7 @@
                     <label class="empty_text ms-2" for="selfshipment">Самовывоз</label>
                 </div>
                 <form class="d-flex flex-column" action="post">
-                    <input class="order_form mb-3" type="text" v-model="name" placeholder="Имя">
+                    <input class="order_form mb-3" type="text" v-model="name"  placeholder="Имя">
                     <input class="order_form mb-3" type="phone" v-model="phone" placeholder="Номер телефона">   
                     <textarea class="order_form mb-3" name="" id="" v-model="adress" cols="30" rows="10" v-if="delivery" placeholder="Адрес доставки"></textarea>
                     <div class="send_order" @click="sendOrder">Отправить</div>
@@ -40,15 +40,19 @@
 </template>
   
 <script>
+    import axios from "axios";
     import { getProductsInBasket } from "../services/ApiMethods";
     import { makeOrder } from "../services/ApiMethods";
     import { baseUrlStorage } from '../services/config.js';
+    import { baseUrl } from "../services/config.js";
+    
 
     export default {
       name: 'Basket',
       components: {
         
       },
+      props: ['Myname', 'Myphone', 'Myadress'],
       data(){
         return {
             basket: [],
@@ -56,10 +60,14 @@
             phone: '',
             adress: '',
             delivery: false,
+            user_id: null,
         }
       },
       async created() {
         this.basket = await this.getBasketProducts();
+        console.log(this.basket);
+        this.getUserData();
+          
       },
       methods: {
        async getBasketProducts() {
@@ -91,17 +99,43 @@
         },
         async sendOrder() {   
         try { 
-          const ordersData = await makeOrder({
+          if(!localStorage.getItem('token')) {const ordersData = await makeOrder({
             name:this.name,
             phone:this.phone,
             adress: this.adress,
             delivery: this.delivery,
             product_id: this.basket.map((item) => {return item.id})
           });
+        }
+
+          if(localStorage.getItem('token')) {
+            axios.post(baseUrl + 'api/order/makeOrderByUser', {
+                name:this.name,
+                phone:this.phone,
+                adress: this.adress,
+                delivery: this.delivery,
+                product_id: this.basket.map((item) => {return item.id}),
+                user_id: this.user_id
+            }).then(response => {
+                    console.log(response);
+                }) 
+          }
+          
         } catch (error) {
               alert("Ошибка формирования заказа!", "error");
             }  
         },
+        getUserData() {
+            if(localStorage.getItem('token')) {
+                axios.get(baseUrl + 'api/user').then(response => {
+                    console.log(response)
+                    this.name = response.data.name;
+                    this.phone = response.data.phone;
+                    this.adress = response.data.adress;
+                    this.user_id = response.data.id;
+                }) 
+          }
+        }
       }
     }
 </script>
