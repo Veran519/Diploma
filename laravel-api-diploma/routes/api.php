@@ -33,7 +33,7 @@ Route::get('/category/getcategories', [CategoryController::class, 'getCategories
 Route::post('/products/getproductsinfo', [ProductController::class, 'getProductInfoByArrayIds']);
 Route::post('/feedback/post', [FeedbackController::class, 'askCallBack']);
 Route::post('/order/make', [OrderController::class, 'makeOrder']);
-Route::get('/order/getOrder', [OrderController::class, 'getOrder'])->middleware('auth:sanctum');
+Route::get('/order/getOrders', [OrderController::class, 'getOrders'])->middleware('auth:sanctum');
 
 Route::post('/registration', [UserController::class, 'registerUser']);
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
