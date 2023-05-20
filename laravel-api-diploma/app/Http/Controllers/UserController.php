@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function registerUser(Request $req) 
     {
-        $credentials = $req->validate([
+        $validator = $req->validate([
             'email' => 'required|email|unique:App\Models\User,email',
             'password' => 'required|min:8',
             'name' => 'required|string',
@@ -30,9 +30,9 @@ class UserController extends Controller
 
         try{
             $user = User::create([
-                'name' => $credentials["name"], 
-                'email' => $credentials["email"],
-                'password' => Hash::make($credentials["password"])
+                'name' => $validator["name"], 
+                'email' => $validator["email"],
+                'password' => Hash::make($validator["password"])
             ]);
     
             if($user) {
@@ -65,7 +65,7 @@ class UserController extends Controller
     }
 
     public function login(Request $req) {
-        $credentials = $req->validate([
+        $validator = $req->validate([
             'email' => ['required', 'email'],
             'password' => ['required']
         ], [
@@ -73,7 +73,7 @@ class UserController extends Controller
             'password.required' => 'Поле Пароль является обязательным!',
         ]);
         try {
-            $user = User::where('email', $credentials['email'])->first();
+            $user = User::where('email', $validator['email'])->first();
             if(!$user) {
                 return response()->json([
                     'status' => 'Not Found',
@@ -103,7 +103,7 @@ class UserController extends Controller
     }
 
     public function updateUsersData(Request $req) {
-        $credentials = $req->validate([
+        $validator = $req->validate([
             'name' => 'required|string',
             'phone' => 'required|digits:11',
             'adress' => 'required|string'
