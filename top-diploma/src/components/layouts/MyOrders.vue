@@ -69,8 +69,8 @@
       methods:{
         getOrders() {
           axios.defaults.headers.common['Authorization'] = 'Bearer '+ localStorage.getItem('token');
-                axios.get(baseUrl + 'api/order/getOrder').then(response => { 
-                  let orders = response.data.order.map((item, index) => {
+                axios.get(baseUrl + 'api/order/getOrders').then(response => { 
+                  let orders = response.data.orders.map((item, index) => {
                         return {
                             id: item.id,
                             name: this.name = item.name,
