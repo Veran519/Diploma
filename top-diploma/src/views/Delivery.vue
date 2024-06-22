@@ -1,8 +1,9 @@
+<!-- Блок информации по доставке и вариантов оплаты -->
 <template>
-    <section>
-        <div class="col-lg-12 col-md-8 col-sm-4 mb-5">
+    <section class="container">
+        <div class="col-lg-12 col-md-12 col-sm-12 mb-5">
               <h2 class="d-heading mb-5">Доставка и оплата</h2>
-              <div class="d-flex">
+              <div class="deliv_contain">
                   <div class="item_d">
                       <h3 class="item_heading mb-4">Доставка курьером</h3>
                       <div class="svg_item mb-4">                      
@@ -59,17 +60,17 @@
         font-size: 24px;
         line-height: 140%;
         color: #502D5C;
-        text-align: center;
         margin: 0 auto;
+        text-align: center;
     }
     .text-d {
         font-family: 'Noto Serif';
         font-size: 20px;
         line-height: 140%;
         color: #502D5C;
-        text-align: center;
         margin: 0 auto;
-        width: 50%;
+        text-align: center;
+        width: 70%;
     }
     .d-heading {
         font-family: 'Pacifico';
@@ -77,10 +78,37 @@
         line-height: 140%;
         color: #502D5C;
         text-align: center;
-        margin: 0 auto;
     }
     .svg_item {
-        margin: 0 auto;
         text-align: center;
+        margin: 0 auto
+    }
+    .deliv_contain {
+        display: flex;
+    }
+    @media screen and (max-width: 767.98px) 
+    {
+        .item_heading {
+            font-size: 20px;
+        }
+        .svg_item svg {
+            width: 64px;
+            height: 64px;
+        }
+        .text-d {
+            font-size: 16px;
+        }
+    }
+    @media screen and (max-width: 636.98px) 
+    {
+        .deliv_contain {
+            flex-wrap: wrap;
+        }
+        .item_d {
+            margin-bottom: 20px;
+        }
+        .text-d {
+            width: 50%;
+        }
     }
 </style>

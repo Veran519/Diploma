@@ -1,9 +1,10 @@
+<!-- Блок с информацией о конкретном товаре -->
 <template>
     <section class="mb-5 p-3">
         <div class="card_info">
-            <div class="prod_item d-flex justify-content-between" v-for="(product, index) in this.product" :key="index">
+            <div class="prod_item d-flex justify-content-between" >
               <div class="img_container">
-                <img class="pic_opt mb-3" :src="product.picture" alt="">
+                <a :href="'http://127.0.0.1:8000/storage/' + product.picture" data-lightbox="product.picture" data-title="My caption"><img class="pic_opt mb-2" :src="'http://127.0.0.1:8000/storage/' + product.picture" alt="Превью Товара"></a>
               </div>
                 <div class="prod_desc">
                     <h4>Описание товара</h4>
@@ -17,8 +18,8 @@
 </template>
 
 <script>
-    import { baseUrlStorage } from "../services/config.js";
-    import { getProductsById } from "../services/ApiMethods";
+    import { getProductsById } from "../services/ApiMethods";   // Импортируем функцию получения товаров по его ид с апи
+    import { toast } from 'vue3-toastify';
 
     export default {
       name: 'ProductInfo',
@@ -27,32 +28,21 @@
       },
       data(){
         return {
-            product: []
+            product: [],    // Возвращаем массив товаров
         }
       },
       async created(){
-        this.product = await this.getProductsById();
+        this.product = await this.getProductsById();    // Получаем выбранный товар в соответствии с его ид
       },
       methods:{
-        async getProductsById() {
+        async getProductsById() {   // Метод получения товара по id
           try {
-          let product = await getProductsById(this.$route.params.id);
-            product = product.data.products.map((item, index) => {
-                return {
-                    name: item.name,
-                    id: item.id,
-                    price: item.price,
-                    category_id: item.category_id,
-                    picture: baseUrlStorage + item.picture,
-                    isActual:item.isActual,
-                    isAvailable: item.isAvailable,
-                    description: item.description
-                };
-            });
-                  
-            return product;
-          } catch (error) {
-              alert("Товары не обнаружены!", "error");
+          let product = await getProductsById(this.$route.params.id); // Получаем выбранный товар
+            product = product.data.products;
+
+            return product; // Обновляем массив товаров, записывая полученный в него
+          } catch (error) {   // Если товар не найден, то выводим ошибку
+              toast.error('Ошибка обнаружения товара!');    
             }   
         },
       }
@@ -95,4 +85,33 @@
     margin: 0 auto;
     border-radius: 5px;
   }
+  @media screen and (max-width: 767.98px) 
+    {
+        .prod_item {
+          align-items: center;
+        }
+        .prod_desc {
+          text-align: center;
+          margin: 0 auto;
+        }
+    }
+    @media screen and (max-width: 529.98px) 
+    {
+        .prod_item {
+          flex-direction: column;
+        }
+    }
+    @media screen and (max-width: 457.98px) 
+    {
+      .img_container {
+        margin: 0;
+      }
+    }
+    @media screen and (max-width: 443.98px) 
+    {
+      .pic_opt {
+        width: 100%;
+        height: 100%;
+      }
+    }
 </style>

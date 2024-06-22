@@ -1,3 +1,4 @@
+<!-- Блок с описанием преимуществ магазина -->
 <template>
     <section class="mb-5">
             <h2 class="h-adv mb-5">Наши преимущества!</h2>
@@ -115,7 +116,7 @@
         }
     }
 
-    @media screen and (min-width: 530px) and (max-width: 797.98px) {
+    @media screen and (min-width: 529px) and (max-width: 797.98px) {
         .header_adv {
             font-size: 18px;
         }
@@ -136,7 +137,7 @@
         }
     }
 
-    @media screen and (min-width: 530px) and (max-width: 597.98px) {
+    @media screen and (min-width: 360px) and (max-width: 597.98px) {
         .header_adv {
             font-size: 18px;
         }
