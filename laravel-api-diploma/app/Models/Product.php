@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory;
 
     protected $table = 'product';
-
+    protected $hidden = ['pivot'];
     protected $fillable = [
         'name',
         'sort',

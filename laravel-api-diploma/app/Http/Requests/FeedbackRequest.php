@@ -14,7 +14,7 @@ class FeedbackRequest extends FormRequest
     public function authorize()
     {
         // only allow updates if the user is logged in
-        return backpack_auth()->check();
+        return true;
     }
 
     /**
@@ -25,7 +25,8 @@ class FeedbackRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => 'required|string',
+            'phone' => 'required|digits:11'
         ];
     }
 
@@ -49,7 +50,9 @@ class FeedbackRequest extends FormRequest
     public function messages()
     {
         return [
-            //
+            'name.required' => '* Укажите ваше имя',
+            'phone.required' => '* Укажите ваш телефон',
+            'phone.digits' => '* Поле телефон должно содержать 11 цифр'
         ];
     }
 }

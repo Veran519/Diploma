@@ -49,7 +49,7 @@ class ReviewCrudController extends CrudController
             'name'  => 'image',
             'label' => 'Скриншот',
             'type'  => 'image',
-            'prefix' => '/storage//'
+            'prefix' => '/storage/'
         ]);
         CRUD::column('created_at');
         CRUD::column('updated_at');
@@ -103,7 +103,7 @@ class ReviewCrudController extends CrudController
             'name'  => 'image',
             'label' => 'Скриншот',
             'type'  => 'image',
-            'prefix' => '/storage//'
+            'prefix' => '/storage/'
         ]); 
     }
 }

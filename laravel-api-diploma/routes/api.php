@@ -24,19 +24,31 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/category/get', [CategoryController::class, 'getCategoryInfo']);
-Route::get('/reviews/get', [ReviewController::class, 'getAllReviews']);
-Route::get('/products/get', [ProductController::class, 'getProducts']);
-Route::get('/products/get/{id}', [ProductController::class, 'getProductsById']);
-Route::get('/products/getactual', [ProductController::class, 'getActualandAvailableProducts']);
-Route::get('/category/getcategories', [CategoryController::class, 'getCategories']);
-Route::post('/products/getproductsinfo', [ProductController::class, 'getProductInfoByArrayIds']);
-Route::post('/feedback/post', [FeedbackController::class, 'askCallBack']);
-Route::post('/order/make', [OrderController::class, 'makeOrder']);
-Route::get('/order/getOrders', [OrderController::class, 'getOrders'])->middleware('auth:sanctum');
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/category/get', 'getCategoryInfo');
+    Route::get('/category/getcategories', 'getCategories');
+});
 
-Route::post('/registration', [UserController::class, 'registerUser']);
-Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/updateUsersData', [UserController::class, 'updateUsersData'])->middleware('auth:sanctum');
-Route::post('/order/makeOrderByUser', [OrderController::class, 'makeOrderByUser'])->middleware('auth:sanctum');
+Route::post('/feedback/post', [FeedbackController::class, 'askCallBack']);
+
+Route::controller(OrderController::class)->group(function () {
+    Route::get('/order/getOrders', 'getOrders')->middleware('auth:sanctum');
+    Route::post('/order/make', 'makeOrder');
+    Route::post('/order/makeOrderByUser', 'makeOrderByUser')->middleware('auth:sanctum');
+});
+
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/products/get', 'getProducts');
+    Route::get('/products/get/{id}', 'getProductsById');
+    Route::get('/products/getactual', 'getActualandAvailableProducts');
+    Route::post('/products/getproductsinfo', 'getProductInfoByArrayIds');
+});
+
+Route::get('/reviews/get', [ReviewController::class, 'getAllReviews']);
+
+Route::controller(UserController::class)->group(function () {
+    Route::post('/registration', 'registerUser');
+    Route::post('/logout', 'logout')->middleware('auth:sanctum');
+    Route::post('/login', 'login');
+    Route::post('/updateUsersData', 'updateUsersData')->middleware('auth:sanctum');
+});

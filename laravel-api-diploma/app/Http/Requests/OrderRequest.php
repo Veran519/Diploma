@@ -14,7 +14,7 @@ class OrderRequest extends FormRequest
     public function authorize()
     {
         // only allow updates if the user is logged in
-        return backpack_auth()->check();
+        return true;
     }
 
     /**
@@ -25,7 +25,10 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => 'required_without:name|string',
+            'phone' => 'required|digits:11',
+            'delivery' => 'required|boolean',
+            'adress' => 'required_if:delivery,true'
         ];
     }
 
@@ -49,7 +52,11 @@ class OrderRequest extends FormRequest
     public function messages()
     {
         return [
-            //
+            'name.required_without' => '* Укажите ваше имя',
+            'phone.required' => '* Укажите ваш телефон',
+            'phone.digits' => '* Поле телефон должно содержать 11 цифр',
+            'delivery.required' => '* Выберите метод доставки!',
+            'adress.required_if' => '* Укажите ваш адрес для доставки'
         ];
     }
 }

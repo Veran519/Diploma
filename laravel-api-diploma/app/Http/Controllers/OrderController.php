@@ -8,88 +8,90 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\OrderRequest;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Arr;
 
 class OrderController extends Controller
 {
-    public function makeOrder(Request $req) {
-        $validator = Validator::make($req->all(), [
-            'name' => 'required|string',
-            'phone' => 'required|string',
-            'delivery' => 'required|boolean'
-        ]);
+    public function makeOrder(OrderRequest $req) { //Функция формирования заказа для гостевого режима
+        
+        $validator = $req->validated(); // производим проверку входных данных, если есть ошибки, выбрасываем исключение
 
         try {
-            if ($validator->fails()) {
-                $errors = $validator->errors();
-                return response()->json([
-                    'status' => 'Failed!',
-                    'message' => 'Произошла ошибка заполнения формы!',
-                    'error' => $errors
-                ]);
-            }
-            $validated = $validator->validated();
-            $product_id = $req->product_id;
-
-            $order = Order::query()->create([
-                'name'  =>  $validated['name'],
-                'phone' =>  $validated['phone'],
-                'delivery' => $validated['delivery'],
+            
+            $product_id = $req->product_id; // id продукта в заказе из корзины
+            $tg_user = "5140681251"; //id телеграм бизнес-аккаунта
+            $photo = Product::where('id', $req->product_id)->first();
+            $img = asset('storage/'.$photo->picture);
+            $caption = "Букет из заказа";
+            
+            $order = Order::query()->create([ //формируем заказ через форму на сайте, заполняя нужные поля формы 
+                'name'  =>  $validator['name'],
+                'phone' =>  $validator['phone'],
+                'delivery' => $validator['delivery'],
                 'adress' => $req->adress
             ]);
+            
+            $order->products()->attach($product_id); //добавляем товары к заказу
 
-            $order->products()->attach($product_id);
+            $products = Order::with('products')->select('id')->latest()->first();
+            $productIds = [];
+            foreach ($products->products as $product) {
+                $productIds[]= $product->sort;
+            }
+            $strProdIds = implode(',', $productIds);
+            
+            if(!$validator['delivery']) {
+                $text = "Пользователь ".$validator['name']." с номером телефона: +".$validator['phone']." оставил заказ № ".$products->id." на сайте: Букет № ".$strProdIds." метод доставки: Самовывоз. По адресу: г. Киров, ул. Пр. Строителей, д. 46а";     //переменная, которая хранит шаблон текста, который будет отправлен с присвоением имени и номера телефона с формы обращения на сайте
+                $TG = file_get_contents("https://api.telegram.org/bot6384176634:AAHloSQvw0LFDxCgAACmEB4kLBh1BxwFBfU/sendMessage?chat_id=$tg_user&text=".$text); //отправка сообщение с помощью бота, используя api телеграм*/
+            } else {
+                $text = "Пользователь ".$validator['name']." с номером телефона: +".$validator['phone']." оставил заказ № ".$products->id."на сайте: Букет №".$strProdIds." метод доставки: Доставка по адресу: ".$adr;     //переменная, которая хранит шаблон текста, который будет отправлен с присвоением имени и номера телефона с формы обращения на сайте
+                $adr = $req->adress;
+                $TG = file_get_contents("https://api.telegram.org/bot6384176634:AAHloSQvw0LFDxCgAACmEB4kLBh1BxwFBfU/sendMessage?chat_id=$tg_user&text=".$text); //отправка сообщение с помощью бота, используя api телеграм*/
+            }
+
+            
+            /*file_get_contents("https://api.telegram.org/bot6384176634:AAHloSQvw0LFDxCgAACmEB4kLBh1BxwFBfU/sendPhoto?chat_id=$tg_user&photo=".$img); //отправка фото с помощью бота, используя api телеграм*/
             
             return response()->json([
+                'order' => $order,
                 'status' => 'success',
                 'message' => 'Заказ сформирован успешно!'
             ]);
+
+            
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'Error!',
                 'message' => 'Ошибка при формировании заказа!',
             ]);
-        }
-        
+        } 
     }
 
-    public function makeOrderByUser(Request $req) {
-        $validator = Validator::make($req->all(), [
-            'name' => 'string',
-            'phone' => 'digits:11',
-            'delivery' => 'required|boolean'
-        ],
-        [
-            'name.string' => 'Поле Имя является обязательным!',
-            'phone.digits' => 'Поле Телефон является обязательным!',
-            'delivery.required' => 'Выберите метод доставки!'
-        ]);
+    public function makeOrderByUser(OrderRequest $req) { //Функция формирования заказа для авторизованного пользователя
 
+        $validator = $req->validated(); // производим проверку входных данных, если есть ошибки, выбрасываем исключение
+         
         try {
-            $user = Auth::user();
+            
+            $user = Auth::user(); //получаем авторизованного пользователя
+            $adress = $req->adress; // получаем адрес пользователя из формы
+            $product_id = $req->product_id; // извлекаем id товара из корзины
+            $user_id = $user->id; // получаем id авторизованного пользователя
+            $user_name = $user->name; // получаем имя пользователя из профиля
 
-            if ($validator->fails()) {
-                $errors = $validator->errors();
-                return response()->json([
-                    'status' => 'Failed!',
-                    'message' => 'Произошла ошибка заполнения данных формы!',
-                    'error' => $errors
-                ]);
-            }
-            $validated = $validator->validated();
-
-            $adress = $req->adress;
-            $product_id = $req->product_id;
-            $user_id = $user->id;
-
-            $order = Order::query()->create([
-                'name'  =>  $validated['name'],
-                'phone' =>  $validated['phone'],
-                'delivery' => $validated['delivery'],
+            $order = Order::query()->create([ //формируем заказ, с помощью заполненных на сайте полей формы и полученных данных из профиля пользоватепля и заполненной формы
+                'name'  =>  $user_name,
+                'phone' =>  $validator['phone'],
+                'delivery' => $validator['delivery'],
                 'adress' => $adress,
                 'user_id' => $user_id
             ]);
 
-            $order->products()->attach($product_id);
+            $order->products()->attach($product_id); // добавляем товары к заказу
 
             return response()->json([
                 'name' => $order,
@@ -105,15 +107,15 @@ class OrderController extends Controller
         }
     }
 
-    public function getOrders(Request $req) {
+    public function getOrders(Request $req) { // Функция получения заказов авторизованных пользователей
         try {
-            $user = Auth::user();
+            $user = Auth::user(); //получаем авторизованного пользователя
             
             $Orders = Order::query()->where('user_id', $user->id)
                                ->select('order.id', 'order.name', 'order.phone', 'order.adress', 'order.delivery')
-                               ->get();
+                               ->get(); //делаем выборку заказов по нужному нам пользователю, выбирая номер заказа, наименование товара, телефон, адрес доставки и метод доставки
         
-            foreach ($Orders as $order) {
+            foreach ($Orders as $order) { // прогоняем через цикл и присваиваем товар в соответсвтии с заказом
                 $order->products;
             }
 

@@ -10,28 +10,47 @@ class CategoryController extends Controller
 {
     public function getCategoryInfo() {
 
-        return response()->json([
-            'categories' => Category::query()->get(),
-            'status' => 'success',
-            'message' => 'Категории обнаружены',
-        ]);
+        try {
+            $categories = Category::query()->get(); //Получаем всем категории из базы
+
+            return response()->json([
+                'categories' => $categories,
+                'status' => 'success',
+                'message' => 'Категории обнаружены',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'Error!',
+                'message' => 'Ошибка обращения к базе. Категории не найдены.',
+            ]);
+        }
+
+        
     }
 
     public function getCategories() {
 
-        $categories = Category::select('category.id', 'category.name')->get();
+        try {
+            $categories = Category::select('category.id', 'category.name')->get(); // Выбираем id и имя категории из базы
 
-        foreach ($categories as $category) {
-            $category->items = Product::query()->where('category_id', $category->id)->get();
+            foreach ($categories as $category) {
+                $category->items = Product::query()->where('category_id', $category->id)->get(); //Проходим циклом по категориям и добавляем к каждой продукты, которые соответствуют запрашиваемой категории
+            }
+
+            $res = $categories; // записываем полученные результаты товаров по категориям в новую переменную
+            
+            return response()->json([
+                'categories' => $res,
+                'status' => 'success',
+                'message' => 'Категории обнаружены',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Нет подобных категорий.',
+            ]);
         }
-
-        $res = $categories;
-        
-        return response()->json([
-            'categories' => $res,
-            'status' => 'success',
-            'message' => 'Категории обнаружены',
-        ]);
     }
 
 }
