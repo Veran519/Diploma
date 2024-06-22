@@ -53,7 +53,7 @@ class ProductCrudController extends CrudController
             'name'  => 'picture',
             'label' => 'Фото букета',
             'type'  => 'image',
-            'prefix' => '/storage//'
+            'prefix' => '/storage/'
         ]);
         CRUD::column('description')->label('Описание');
         $this->crud->addColumn([
@@ -147,7 +147,13 @@ class ProductCrudController extends CrudController
         CRUD::column('sort')->label('Сортировка');
         CRUD::column('name')->label('Наименование товара');
         CRUD::column('price')->label('Цена');
-        CRUD::column('pricture')->type('image')->label('Фото букета');
+        //CRUD::column('pricture')->type('image')->label('Фото букета');
+        $this->crud->addColumn([
+            'name'  => 'picture',
+            'label' => 'Фото букета',
+            'type'  => 'image',
+            'prefix' => '/storage/'
+        ]);
         CRUD::column('description')->label('Описание');
         $this->crud->addColumn([
             'name'  => 'isActual',

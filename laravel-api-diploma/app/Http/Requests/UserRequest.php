@@ -14,7 +14,7 @@ class UserRequest extends FormRequest
     public function authorize()
     {
         // only allow updates if the user is logged in
-        return backpack_auth()->check();
+        return true;
     }
 
     /**
@@ -25,7 +25,10 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'email' => 'required|email|unique:App\Models\User,email', 
+            'password' => 'required|min:8|confirmed',
+            'name' => 'required|string',
+            'password_confirmation' => 'required'
         ];
     }
 
@@ -49,7 +52,13 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
-            //
+            'email.required' => 'Поле Email является обязательным!',
+            'email.email' => 'Недопустимый формат поля Email!',
+            'email.unique' => 'Пользователь с таким Email уже существует!',
+            'name.required' => 'Поле Имя является обязательным!',
+            'password.required' => 'Поле Пароль является обязательным!',
+            'password.confirmed' => 'Пароли не совпадают!',
+            'password_confirmation.required' => 'Поле Подтверждение пароля является обязательным!',
         ];
     }
 }

@@ -2,12 +2,22 @@
 
 @php
     $widgets['before_content'][] = [
+    'type'        => 'jumbotron',
+    'heading'     => 'Админ панель "Элен"!',
+    'content'     => 'Для того, чтобы начать работу, используйте панель слева :)',
+    'button_link' => backpack_url('logout'),
+    'button_text' => 'Выйти',
+    ];
+@endphp
+
+@php
+    $widgets['before_content'][] = [
         'type' => 'card',
         'wrapper' => ['class' => 'd-inline-block w-25'],
         'class' => 'card text-white bg-primary mb-2',
         'content'     => [
-            'header' => 'Количество цветов всего: ',
-            'body' => $productCount    
+            'header' => 'Количество букетов всего: ',
+            'body' => \App\Models\Product::count(),    
         ],  
     ];
 @endphp
@@ -18,35 +28,12 @@
         'wrapper' => ['class' => 'd-inline-block w-25'],
         'class' => 'card text-white bg-primary mb-2',
         'content'     => [
-            'header' => 'header',
-            'body' => 'body'    
+            'header' => 'Количество заказов всего: ',
+            'body' => \App\Models\Order::count(),    
         ],  
     ];
 @endphp
 
-@php
-    $widgets['before_content'][] = [
-        'type' => 'card',
-        'wrapper' => ['class' => 'd-inline-block w-25'],
-        'class' => 'card text-white bg-primary mb-2',
-        'content'     => [
-            'header' => 'header',
-            'body' => 'body'    
-        ],  
-    ];
-@endphp
 
-@php
-    $widgets['before_content'][] = [
-        'type' => 'progress',
-        'wrapper' => ['class' => 'w-25'],
-        'class' => 'card text-white bg-info mb-2',
-        'description' => 'Товаров всего в наличии',
-        'progress' => 60,
-        'hint' => 'Подсказка тебе'  
-    ];
-@endphp
 
-@section('content')
-    <p>Административная модель магазина:</p>
-@endsection
+

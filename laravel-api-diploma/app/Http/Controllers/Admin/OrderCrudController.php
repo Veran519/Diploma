@@ -73,7 +73,16 @@ class OrderCrudController extends CrudController
             'type' => 'select',
             'entity' => 'products',
             'model' => 'App\Models\Order',
-            'attribute' => 'name',
+            'attribute' => 'sort',
+        ]);
+
+        $this->crud->addColumn([
+            'name'  => 'order_id',
+            'label' => 'Цена',
+            'type' => 'select',
+            'entity' => 'products',
+            'model' => 'App\Models\Product',
+            'attribute' => 'price',
         ]);
 
         /**
@@ -146,6 +155,22 @@ class OrderCrudController extends CrudController
                 1 => 'Доставка'
             ]
         ]);
-        CRUD::column('product_id')->label('Товар');
+        $this->crud->addColumn([
+            'name'  => 'pictures',
+            'label' => 'Товары',
+            'type' => 'json',
+            'entity' => 'pictures',
+            'model' => 'App\Models\Order',
+            'attribute' => 'picture',
+            'prefix' => '/storage/',
+        ]);
+        $this->crud->addColumn([
+            'name'  => 'order_id',
+            'label' => 'Цена',
+            'type' => 'select',
+            'entity' => 'products',
+            'model' => 'App\Models\Product',
+            'attribute' => 'price',
+        ]);
     }
 }
