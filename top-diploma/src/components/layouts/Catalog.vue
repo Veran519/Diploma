@@ -1,13 +1,14 @@
+<!-- Блок каталога товаров магазина по категориям -->
 <template>
     <section class="mt-5 mb-5">
               <h2 class="h-text mb-5">Каталог</h2>
-              <div class="d-flex">
+              <div class="d-flex item_container">
                   <div class="item_bouqet justify-content-between mb-5" v-for="(category, index) in this.category" :key="index">
                       <h3 class="cat-h">{{category.name}}</h3>
                       <div class="img_container">
-                        <a :href="category.image_preview" data-lightbox="image-1" data-title="My caption"><img :src="category.image_preview" class="img_size mb-5" alt=""></a>
+                        <a :href="category.image_preview" data-lightbox="image.preview" data-title="My caption"><img :src="category.image_preview" class="img_size mb-3" alt=""></a>
                       </div>
-                      <form action="" class="calltoact buyC">
+                      <form action="" class="calltoaction">
                           <div class="bt" @click="this.$router.push('/Products')">Купить</div>
                       </form>
                   </div>
@@ -16,8 +17,9 @@
 </template>
   
 <script>
-    import { getCategories } from "../../services/ApiMethods";
-    import { baseUrlStorage } from "../../services/config.js";
+    import { getCategories } from "../../services/ApiMethods";  // Импортируем функцию, которая получает катеогории с сервера
+    import { baseUrlStorage } from "../../services/config.js";  // Импортируем префикс для изображений, чтоб корректно отобразить путь к ним
+    import { toast } from 'vue3-toastify';
 
     export default {
       name: 'Catalog',
@@ -26,27 +28,27 @@
       },
       data(){
         return {
-            category: [],
+            category: [], // Возвращаем пустой массив с категориями
         }
       },
       async created(){
-        this.category = await this.getCategories();
+        this.category = await this.getCategories(); // приравниваем пустой массви к методу, в котором производим отбор данных с бэка и выводим
       },
       methods:{
-        async getCategories() {
+        async getCategories() { // Метод получения категорий с бэка
           try {
-          let category = await getCategories();
-            category = category.data.categories.map((item, index) => {
+          let category = await getCategories(); // Задаем переменную категорий, приравниваем ее к функции получения категорий с бэка
+            category = category.data.categories.map((item, index) => {  // перебираем массив данных с бэка и выводим нужные нам данные
                 return {
                     name: item.name,
                     id: item.id,
                     image_preview: baseUrlStorage + item.prevImage
                 };
             });
-                  
-            return category;
+            
+            return category;  // Возвращаем категории после перебора
           } catch (error) {
-              alert("Работы не были получены!", "error");
+              toast.error('Ни одной категории обнаружить не удалось! Ошибка!'); //Выводим тост об ошибке, если она есть
             }   
         },
       }
@@ -54,13 +56,13 @@
 </script>
 
 <style>
-  .calltoact {
+  .calltoaction {
     font-family: 'Noto Serif';
     font-size: 20px;
     background-color: #502D5C;
     width: fit-content; 
     border-radius: 5px;
-    width: 50%;
+    width: 30%;
     height: 40px;
     margin: 0 auto;
     cursor: pointer;
@@ -68,14 +70,10 @@
 
   .bt {
     color: #BBBABC !important;
-    padding: 5px;
-  }
-
-  .buyC {
-    text-align: center;
+    padding: 5px 16px;
   }
   .img_size {
-    width: 380px;
+    width: 340px;
     height: 500px;
     border-radius: 5px;
   }
@@ -86,8 +84,8 @@
     margin: 0 auto;
   }
   .item_bouqet:nth-child(2) {
-    margin-left: 65px;
-    margin-right: 65px;
+    margin-left: 30px;
+    margin-right: 30px;
   }
   .h-text {
     text-align: center;
@@ -106,85 +104,36 @@
     text-align: center;
     margin: 0 auto;
     margin-bottom: 20px;
-    cursor: pointer;
   }
-
-  @media screen and (min-width: 1200px) and (max-width: 1399.98px) {
-        .header_adv {
-            font-size: 30px;
-        }
-        .text-adv {
-            font-size: 18px;
-        }
+    @media screen and (max-width: 1227.98px) 
+    {
+      .img_size {
+        width: 300px;
+        height: 400px;
+      }
+      .bt {
+        padding: 5px 10px;
+      }
     }
-    @media screen and (min-width: 992px) and (max-width: 1199.98px) {
-        .header_adv {
-            font-size: 22px;
-        }
-        .text-adv {
-            font-size: 14px;
-        }
-        .svg-icon {
-            width: 50%;
-            margin: 0 auto;
-        }
+    @media screen and (max-width: 1050.98px) 
+    {
+      .item_container {
+        flex-wrap: wrap;
+      }
+      .item_bouqet:nth-child(2) {
+        margin: 0 auto;
+      }
     }
-    @media screen and (min-width: 598px) and (max-width: 991.98px) {
-        .header_adv {
-            font-size: 18px;
-        }
-        .text-adv {
-            font-size: 14px;
-        }
-        .svg-icon {
-            width: 50%;
-            margin: 0 auto;
-        }
-        .h-adv {
-            margin: 0 auto;
-            text-align: center;
-        }
+    @media screen and (max-width: 767.98px) 
+    {
+      .item_bouqet:nth-child(2) {
+        margin: 0 auto;
+      }
     }
-
-    @media screen and (min-width: 530px) and (max-width: 797.98px) {
-        .header_adv {
-            font-size: 18px;
-        }
-        .text-adv {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        .svg-icon {
-            width: 50%;
-            margin: 0 auto;
-        }
-        .adv_container {
-            flex-direction: column;
-        }
-        .h-adv {
-            margin: 0 auto;
-            text-align: center;
-        }
-    }
-
-    @media screen and (min-width: 530px) and (max-width: 597.98px) {
-        .header_adv {
-            font-size: 18px;
-        }
-        .text-adv {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        .svg-icon {
-            width: 50%;
-            margin: 0 auto;
-        }
-        .adv_container {
-            flex-direction: column;
-        }
-        .h-adv {
-            margin: 0 auto;
-            text-align: center;
-        }
+    @media screen and (max-width: 529.98px) 
+    {
+      .item_container {
+        flex-direction: column;
+      }
     }
 </style>

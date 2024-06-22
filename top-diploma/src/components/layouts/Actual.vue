@@ -1,10 +1,11 @@
+<!-- Блок информации, в котором содержится слайдер с акутальными товарами на текущий момент или доступными, или доступными, но теми, которые есть возможность повторить -->
 <template>
     <section class=" mt-5 slider">
         <h2 class="mb-5 actual_heading">Актуально сейчас!</h2>
-        <swiper ref="mySwiper" :options="swiperOptions" class="swiper" :modules="modules" :slides-per-view="3" :space-between="30" :loop="true" :autoplay="{delay: 2500, disableOnInteraction: false}">
+        <swiper ref="mySwiper" :options="swiperOptions" class="swiper" :modules="modules"  :loop="true" :autoplay="{delay: 2500, disableOnInteraction: false}" :breakpoints="{slidesPerView:3, 640: {slidesPerView:3, spaceBetween: 30}, 480: {slidesPerView:2, spaceBetween: 20}, 320: {slidesPerView:1, spaceBetween: 10}}">
             <swiper-slide v-for="(items, index) in this.actual" :key="index">
                 <div class ="box">
-                    <img :src="items.picture" class="img_slide">
+                    <a :href="items.picture" data-lightbox="items.picture" data-title="My caption"><img :src="items.picture" class="img_slide"></a>
                     <div class="ribbon-right" v-if="items.isActual">Актуально сейчас!</div>
                     <div class="flag-right" v-if="items.isAvailable">Можем повторить!</div>
                 </div>
@@ -14,40 +15,40 @@
 </template>
   
 <script>
-    import { Swiper, SwiperSlide } from 'swiper/vue'
+    import { Swiper, SwiperSlide } from 'swiper/vue'    // Импортируем слайдер Swiper со всеми его настройками и ключами, далее получаем const префикс для изображений с бд, а также получаем метод, который получает интересующие нас изображения
     import { baseUrlStorage } from "../../services/config.js";
     import {  Autoplay } from 'swiper'
     import { getActualProducts } from '../../services/ApiMethods';
+    import { toast } from 'vue3-toastify';
 
     export default {
     name: 'Reviews',
     components: {
-        Swiper,
+        Swiper,     // Указываем компоненты слайдера
         SwiperSlide
     },
     data(){
         return {
-            modules: [Autoplay],
-            actual: []
+            modules: [Autoplay],    // Подключаем модуль автопроигрыша для слайдера
+            actual: []  // пустой массив актуальных изображений букетов, который будет наполняться
         }
       },
       async created(){
-        this.actual = await this.getActualProducts();
-        console.log(this.actual)
+        this.actual = await this.getActualProducts();   // Приравниваем пустой массив актуальности к функции, которая его заполняет
       },
       methods:{
-        async getActualProducts() {
+        async getActualProducts() { // Метод получения данных с сервера для заполнения массива актуальности
           try {
-          let actual = await getActualProducts();
-            actual = actual.data.product.map((item, index) => {
-                if(item.isActual = 1) {
+          let actual = await getActualProducts();   // Объявляем переменную actual и приравниваем ее к функции получения актуальных букетов с сервера
+            actual = actual.data.product.map((item, index) => { // Производим перебор массива посредством map и возвращаем интересущие нас данные
+                if(item.isActual = 1) { // Если Актуально, используем след код
                     return {
                         picture: baseUrlStorage + item.picture,
                         isActual: item.isActual,
                         isAvailable: item.isAvailable
                     };
                 }
-                if(item.isAvailable = 1) {
+                if(item.isAvailable = 1) {  // Если доступно, выводим код ниже
                     return {
                         picture: baseUrlStorage + item.picture,
                         isActual: item.isActual,
@@ -56,9 +57,9 @@
                 }
                 });
                   
-            return actual;
+            return actual;  // Возвращаем актуальные букеты
           } catch (error) {
-              alert("Актуальные товары не найдены!", "error");
+                toast.error("Ни одного букета не было найдено, который удовлетворял бы условиям"); 
             }   
         },
       }
@@ -69,6 +70,7 @@
     .img_slide {
         width: 400px;
         height: 500px;
+        border-radius: 10px;
     }
     .slider {
         margin-bottom: 100px;
@@ -150,5 +152,100 @@
         line-height: 140%;
         color: #502D5C;
         margin: 0 auto;
+    }
+    @media screen and (max-width: 1624.98px) 
+    {
+        .img_slide {
+            width: 310px;
+            height: 450px;
+        }
+        .slider {
+            width: 100%;
+        }
+    }
+    @media screen and (max-width: 1050.98px) 
+    {
+        .img_slide {
+            width: 277px;
+            height: 400px;
+        }  
+    }
+    @media screen and (max-width: 992.98px) 
+    {
+        .img_slide {
+            width: 258px;
+        }  
+    }
+    @media screen and (max-width: 895.98px) 
+    {
+        .img_slide {
+            width: 95.9%;
+        }
+    }
+    @media screen and (max-width: 806.98px) 
+    {
+        .img_slide {
+            width: 95.1%;
+            height: 300px;
+        }
+    }
+    @media screen and (max-width: 739.98px) 
+    {
+        .img_slide {
+            width: 94.6%;
+        }
+    }
+    @media screen and (max-width: 670.98px) 
+    {
+        .img_slide {
+            width: 94.1%;
+            height: 250px;
+        }
+    }
+    @media screen and (max-width: 639.98px) 
+    {
+        .img_slide {
+            width: 96%;
+            height: 400px;
+        }
+    }
+    @media screen and (max-width: 557.98px) 
+    {
+        .img_slide {
+            width: 95.5%;
+            height: 350px;
+        }
+    }
+    @media screen and (max-width: 501.98px) 
+    {
+        .img_slide {
+            width: 95%;
+        }
+    }
+    @media screen and (max-width: 480.98px) 
+    {
+        .img_slide {
+            height: 270px;
+        }
+    }
+    @media screen and (max-width: 479.98px) 
+    {
+        .img_slide {
+            width: 97.5%;
+            height: 600px;
+        }
+    }
+    @media screen and (max-width: 405.98px) 
+    {
+        .img_slide {
+            width: 97%;
+            height: 500px;
+        }
+    }
+    @media screen and (max-width: 360.98px) 
+    {
+        .img_slide {
+            width: 96.5%;
+        }
     }
 </style>
